@@ -31,9 +31,9 @@ jobs:
 
       - name: Ensure deployment files exist
         run: |
-          test -f architecture.html
-          if [ ! -f app.yaml ]; then
-            cat > app.yaml <<'YAML'
+          test -f "${GITHUB_WORKSPACE}/architecture.html"
+          if [ ! -f "${GITHUB_WORKSPACE}/app.yaml" ]; then
+            cat > "${GITHUB_WORKSPACE}/app.yaml" <<'YAML'
             runtime: python311
 
             handlers:
@@ -49,5 +49,15 @@ jobs:
             YAML
           fi
 
+      - name: Debug deployment files
+        run: |
+          echo "Workspace: ${GITHUB_WORKSPACE}"
+          pwd
+          ls -la "${GITHUB_WORKSPACE}"
+          test -f "${GITHUB_WORKSPACE}/app.yaml"
+          test -f "${GITHUB_WORKSPACE}/architecture.html"
+          echo "--- app.yaml ---"
+          cat "${GITHUB_WORKSPACE}/app.yaml"
+
       - name: Deploy to App Engine
-        run: gcloud app deploy app.yaml --quiet
+        run: gcloud app deploy "${GITHUB_WORKSPACE}/app.yaml" --quiet
