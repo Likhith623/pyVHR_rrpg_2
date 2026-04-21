@@ -1,6 +1,6 @@
 <div align="center">
 
-<h1>🛡️ NeuroPulse</h1>
+<h1>🛡️ SpectroPulse</h1>
 <h3>Multi-Modal Deepfake Detection via Spatio-Temporal & Physiological Fusion</h3>
 
 <p>
@@ -39,7 +39,7 @@
 
 ## 🏗️ System Overview
 
-NeuroPulse employs a **dual-stream paradigm**: a physiological stream grounded in biological signal analysis, and three independent spatio-temporal CNN streams. All four models are trained on the same `master_dataset_index.csv` with identity-aware cross-validation to prevent data leakage, then fused via late-stage probability aggregation.
+SpectroPulse employs a **dual-stream paradigm**: a physiological stream grounded in biological signal analysis, and three independent spatio-temporal CNN streams. All four models are trained on the same `master_dataset_index.csv` with identity-aware cross-validation to prevent data leakage, then fused via late-stage probability aggregation.
 
 | Stream | Architecture | Feature Dim | Input | Output File |
 |--------|-------------|-------------|-------|-------------|
@@ -626,8 +626,8 @@ Step 5: ensemble_fusion      → add all 4 outputs as Kaggle inputs → run all 
 
 ```bash
 # Clone the repository
-git clone https://github.com/<your-username>/NeuroPulse.git
-cd NeuroPulse
+git clone https://github.com/Likhith623/pyVHR_rrpg_4
+
 
 # Run on Kaggle (recommended — P100 GPU required)
 # 1. Upload notebooks to Kaggle
@@ -646,7 +646,7 @@ This project is released under the [MIT License](LICENSE).
 
 <div align="center">
 <sub>
-NeuroPulse · Multi-Modal Deepfake Detection System ·
+SpectroPulse · Multi-Modal Deepfake Detection System ·
 rPPG + EfficientNet-B4 + Xception + Swin-Tiny Late-Fusion Ensemble<br>
 Trained on FaceForensics++ · Celeb-DF v2 · DFDC · Custom Dataset ·
 Identity-aware 5-fold cross-validation · Bootstrap 95% confidence intervals
