@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>SpectroPulse: Multi-Modal Deepfake Detection System</title>
+<title>NeuroPulse: Multi-Modal Deepfake Detection System</title>
 <style>
   :root {
     --primary:   #1a237e;
@@ -586,7 +586,7 @@
 
   <div class="hero-content">
     <div class="hero-badge">Research Paper · Deep Learning · Computer Vision</div>
-    <h1><span>SpectroPulse</span><br>Orthogonal Four-Stream Deepfake Video Detection<br>via Haemodynamic Signal Analysis,<br>Depthwise-Separable Spatio-Temporal Dual-Branch Attention,<br>and Hierarchical Shifted-Window Transformer<br>Late-Fusion Ensemble</h1>
+    <h1><span>NeuroPulse</span><br>Orthogonal Four-Stream Deepfake Video Detection<br>via Haemodynamic Signal Analysis,<br>Depthwise-Separable Spatio-Temporal Dual-Branch Attention,<br>and Hierarchical Shifted-Window Transformer<br>Late-Fusion Ensemble</h1>
     <p>A rigorous four-stream ensemble architecture combining Remote Photoplethysmography signal analysis, EfficientNet-B4, Xception, and Swin Transformer spatio-temporal models for state-of-the-art deepfake video detection.</p>
     <div class="hero-tags">
       <span class="hero-tag">PyTorch 2.4</span>
@@ -621,13 +621,17 @@
         <li><a href="#datasets">Datasets &amp; Pre-processing</a></li>
         <li><a href="#model1">Model 1 — rPPG + ML Stacking</a></li>
         <li><a href="#model2">Model 2 — EfficientNet-B4 BiLSTM</a></li>
+        <li><a href="#model3">Model 3 — Xception + Frequency Branch</a></li>
       </ul>
     </div>
     <div class="card" style="padding:20px 24px;">
       <ul class="feature-list">
-        <li><a href="#model3">Model 3 — Xception + Frequency Branch</a></li>
         <li><a href="#model4">Model 4 — Swin Transformer + DCT</a></li>
         <li><a href="#ensemble">Late-Fusion Ensemble</a></li>
+        <li><a href="#backend-data">Backend — Data Handling (Page 1)</a></li>
+        <li><a href="#backend-features">Backend — Feature Engineering (Page 2)</a></li>
+        <li><a href="#backend-training">Backend — Training Strategy &amp; Technologies (Page 3)</a></li>
+        <li><a href="#frontend">Frontend Technologies &amp; Justification</a></li>
         <li><a href="#outputs">Outputs &amp; Reproducibility</a></li>
       </ul>
     </div>
@@ -639,7 +643,7 @@
   <div class="section-label">Architecture</div>
   <div class="section-title">System Overview</div>
   <div class="section-sub">
-    SpectroPulse employs a <strong>dual-stream paradigm</strong>: a physiological stream grounded in biological signal analysis,
+    NeuroPulse employs a <strong>dual-stream paradigm</strong>: a physiological stream grounded in biological signal analysis,
     and three independent spatio-temporal CNN streams. All four models are trained on the same
     <em>master_dataset_index.csv</em> with identity-aware cross-validation to prevent data leakage,
     then fused via late-stage probability aggregation.
@@ -1503,6 +1507,643 @@
   </div>
 </section>
 
+<!-- ══════════════════════════════════════════════════════════ BACKEND PAGE 1: Data Handling -->
+<section class="section" id="backend-data">
+  <div class="section-label">Backend · Page 1 of 3</div>
+  <div class="section-title">Data Handling in Backend</div>
+  <div class="section-sub">
+    The backend ingests raw video files and orchestrates a rigorous preprocessing pipeline — from frame extraction
+    and face detection to feature engineering — all anchored to a single shared dataset index for perfect
+    cross-model consistency.
+  </div>
+
+  <!-- Input + Process pipeline -->
+  <div class="fc-section">
+    <div class="fc-header">
+      <div class="fc-num" style="background:linear-gradient(135deg,#00695c,#26a69a);">B1</div>
+      <div>
+        <h2>Video Ingestion &amp; Preprocessing Pipeline</h2>
+        <p>Raw video → frame extraction → face detection → normalisation → master_dataset_index.csv</p>
+      </div>
+    </div>
+    <div class="fc-wrapper">
+<svg viewBox="0 0 1060 580" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI',system-ui,sans-serif">
+  <defs>
+    <marker id="arrB1" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
+      <path d="M0,0 L0,7 L9,3.5 z" fill="#546e7a"/>
+    </marker>
+    <filter id="shB1"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#00695c" flood-opacity="0.10"/></filter>
+  </defs>
+
+  <text x="530" y="28" text-anchor="middle" font-size="14" font-weight="800" fill="#1a237e">Backend Data Ingestion &amp; Preprocessing Flow</text>
+
+  <!-- INPUT -->
+  <rect x="280" y="42" width="500" height="62" rx="14" fill="#e0f2f1" stroke="#00695c" stroke-width="2" filter="url(#shB1)"/>
+  <text x="530" y="68" text-anchor="middle" font-size="13" font-weight="800" fill="#004d40">🎬 Input: Video File</text>
+  <text x="530" y="87" text-anchor="middle" font-size="11" fill="#00695c">Supported formats: MP4 · AVI · MOV · MKV · WEBM</text>
+  <line x1="530" y1="104" x2="530" y2="126" stroke="#546e7a" stroke-width="1.8" marker-end="url(#arrB1)"/>
+
+  <!-- Step 1: Frame Extraction -->
+  <rect x="80" y="128" width="900" height="70" rx="12" fill="#b2dfdb" stroke="#00695c" stroke-width="2" filter="url(#shB1)"/>
+  <text x="530" y="152" text-anchor="middle" font-size="13" font-weight="700" fill="#004d40">Step 1 — Frame Extraction (OpenCV)</text>
+  <text x="530" y="170" text-anchor="middle" font-size="11" fill="#004d40">cv2.VideoCapture → sample frames at uniform intervals via np.linspace</text>
+  <text x="530" y="185" text-anchor="middle" font-size="10" fill="#00695c">Max 60 frames per video · Preserves temporal distribution across entire clip duration</text>
+  <line x1="530" y1="198" x2="530" y2="220" stroke="#546e7a" stroke-width="1.8" marker-end="url(#arrB1)"/>
+
+  <!-- Step 2: Face Detection -->
+  <rect x="80" y="222" width="900" height="72" rx="12" fill="#a5d6a7" stroke="#388e3c" stroke-width="2" filter="url(#shB1)"/>
+  <text x="530" y="248" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">Step 2 — Face Detection &amp; Alignment</text>
+  <text x="530" y="266" text-anchor="middle" font-size="11" fill="#2e7d32">MediaPipe FaceMesh (468 landmarks) for rPPG stream</text>
+  <text x="530" y="282" text-anchor="middle" font-size="10" fill="#388e3c">MTCNN + Eye-landmark alignment for EfficientNet · Xception · Swin streams · Laplacian quality gate</text>
+  <line x1="530" y1="294" x2="530" y2="316" stroke="#546e7a" stroke-width="1.8" marker-end="url(#arrB1)"/>
+
+  <!-- Step 3: Normalise -->
+  <rect x="80" y="318" width="900" height="70" rx="12" fill="#e8f5e9" stroke="#388e3c" stroke-width="1.5" filter="url(#shB1)"/>
+  <text x="530" y="342" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">Step 3 — Normalise &amp; Preprocess Images</text>
+  <text x="530" y="360" text-anchor="middle" font-size="11" fill="#2e7d32">Resize to model-native resolution (224² / 299²) · ImageNet normalisation (μ, σ per channel)</text>
+  <text x="530" y="376" text-anchor="middle" font-size="10" fill="#388e3c">Center-crop fallback · uint8 cache as .npy · FP32 tensor conversion at runtime</text>
+  <line x1="530" y1="388" x2="530" y2="410" stroke="#546e7a" stroke-width="1.8" marker-end="url(#arrB1)"/>
+
+  <!-- master_dataset_index.csv highlight box -->
+  <rect x="120" y="412" width="820" height="100" rx="16" fill="#1a237e" stroke="#0d1460" stroke-width="2.5" filter="url(#shB1)"/>
+  <text x="530" y="442" text-anchor="middle" font-size="14" font-weight="900" fill="#fff">👉 master_dataset_index.csv</text>
+  <text x="530" y="462" text-anchor="middle" font-size="12" fill="#90caf9">Single shared dataset file consumed by ALL four models</text>
+  <text x="200" y="488" font-size="11" fill="#bbdefb">✔ No data mismatch</text>
+  <text x="430" y="488" font-size="11" fill="#bbdefb">✔ Same input for all models</text>
+  <text x="680" y="488" font-size="11" fill="#bbdefb">✔ No data leakage</text>
+  <text x="530" y="506" text-anchor="middle" font-size="10" fill="#c5cae9">Columns: video_id · label · identity · split · dataset_source · file_path</text>
+</svg>
+    </div>
+  </div>
+
+  <!-- 3-column info cards -->
+  <div class="card-grid card-grid-3 mt-24">
+    <div class="card" style="border-top:3px solid #00695c;">
+      <div style="font-size:28px;margin-bottom:10px;">🎬</div>
+      <h3 style="color:#00695c;margin-bottom:10px;font-size:15px;">Input Formats</h3>
+      <ul class="feature-list">
+        <li>MP4 — primary format, hardware-accelerated decode</li>
+        <li>AVI — uncompressed &amp; DivX variants</li>
+        <li>MOV / MKV / WEBM — container passthrough</li>
+        <li>cv2.VideoCapture unified read interface</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:3px solid #1565c0;">
+      <div style="font-size:28px;margin-bottom:10px;">🔬</div>
+      <h3 style="color:#1565c0;margin-bottom:10px;font-size:15px;">Face Detection Models</h3>
+      <ul class="feature-list">
+        <li>MediaPipe FaceMesh — 468 facial landmarks for rPPG</li>
+        <li>MTCNN (facenet-pytorch) — bounding box + 5 keypoints</li>
+        <li>Eye-angle warpAffine alignment for CNN streams</li>
+        <li>Laplacian variance ≥ 20 quality gate enforced</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:3px solid #4a148c;">
+      <div style="font-size:28px;margin-bottom:10px;">🗂️</div>
+      <h3 style="color:#4a148c;margin-bottom:10px;font-size:15px;">master_dataset_index.csv</h3>
+      <ul class="feature-list">
+        <li>Compiled once by unified data compiler script</li>
+        <li>All four models read from this single source</li>
+        <li>Guarantees identical video-level alignment</li>
+        <li>Enables leakage-free late-fusion ensemble</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════ BACKEND PAGE 2: Feature Engineering -->
+<section class="section" id="backend-features">
+  <div class="section-label">Backend · Page 2 of 3</div>
+  <div class="section-title">Feature Engineering (Backend Logic)</div>
+  <div class="section-sub">
+    The backend extracts four orthogonal categories of discriminative features from each video.
+    This multi-level analysis — spanning spatial, temporal, frequency, and physiological domains —
+    creates a richly complementary representation that is extremely difficult for deepfake generators to simultaneously fool.
+  </div>
+
+  <div class="fc-section">
+    <div class="fc-header">
+      <div class="fc-num" style="background:linear-gradient(135deg,#1565c0,#42a5f5);">B2</div>
+      <div>
+        <h2>Four-Domain Feature Extraction Architecture</h2>
+        <p>Spatial · Temporal · Frequency · Physiological — orthogonal signals fused at the late-ensemble stage</p>
+      </div>
+    </div>
+    <div class="fc-wrapper">
+<svg viewBox="0 0 1060 560" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI',system-ui,sans-serif">
+  <defs>
+    <marker id="arrB2" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
+      <path d="M0,0 L0,7 L9,3.5 z" fill="#546e7a"/>
+    </marker>
+    <filter id="shB2"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#1565c0" flood-opacity="0.10"/></filter>
+  </defs>
+
+  <text x="530" y="28" text-anchor="middle" font-size="14" font-weight="800" fill="#1a237e">Multi-Domain Feature Engineering Pipeline</text>
+
+  <!-- Shared input banner -->
+  <rect x="200" y="42" width="660" height="52" rx="12" fill="#e3f2fd" stroke="#1565c0" stroke-width="2" filter="url(#shB2)"/>
+  <text x="530" y="65" text-anchor="middle" font-size="12" font-weight="700" fill="#0d47a1">Preprocessed Face Frames (from master_dataset_index.csv)</text>
+  <text x="530" y="82" text-anchor="middle" font-size="10" fill="#1565c0">Same video input · same identity-aware splits · same label alignment</text>
+
+  <!-- Arrows fanning out to 4 branches -->
+  <line x1="270" y1="94" x2="136" y2="136" stroke="#90a4ae" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrB2)"/>
+  <line x1="400" y1="94" x2="380" y2="136" stroke="#90a4ae" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrB2)"/>
+  <line x1="660" y1="94" x2="682" y2="136" stroke="#90a4ae" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrB2)"/>
+  <line x1="790" y1="94" x2="924" y2="136" stroke="#90a4ae" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrB2)"/>
+
+  <!-- SPATIAL branch -->
+  <rect x="10"  y="138" width="250" height="140" rx="12" fill="#1565c0" stroke="#0d47a1" stroke-width="2" filter="url(#shB2)"/>
+  <text x="135" y="162" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">🖼️ Spatial Features</text>
+  <text x="135" y="180" text-anchor="middle" font-size="10" fill="#bbdefb">Image-level discriminative</text>
+  <text x="135" y="198" text-anchor="middle" font-size="10" fill="#e3f2fd">EfficientNet-B4 (1792d)</text>
+  <text x="135" y="214" text-anchor="middle" font-size="10" fill="#e3f2fd">Xception (2048d)</text>
+  <text x="135" y="230" text-anchor="middle" font-size="10" fill="#e3f2fd">Swin-Tiny (768d)</text>
+  <text x="135" y="246" text-anchor="middle" font-size="10" fill="#e3f2fd">ECA channel re-weighting</text>
+  <text x="135" y="262" text-anchor="middle" font-size="9"  fill="#90caf9">Texture · boundary · blending artefacts</text>
+
+  <!-- TEMPORAL branch -->
+  <rect x="278" y="138" width="250" height="140" rx="12" fill="#00695c" stroke="#004d40" stroke-width="2" filter="url(#shB2)"/>
+  <text x="403" y="162" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">⏱️ Temporal Features</text>
+  <text x="403" y="180" text-anchor="middle" font-size="10" fill="#b2dfdb">Frame-to-frame dynamics</text>
+  <text x="403" y="198" text-anchor="middle" font-size="10" fill="#e0f2f1">BiLSTM 2-layer (256H)</text>
+  <text x="403" y="214" text-anchor="middle" font-size="10" fill="#e0f2f1">Multi-Head Attention (4H)</text>
+  <text x="403" y="230" text-anchor="middle" font-size="10" fill="#e0f2f1">pack_padded_sequence</text>
+  <text x="403" y="246" text-anchor="middle" font-size="10" fill="#e0f2f1">Progressive frame curriculum</text>
+  <text x="403" y="262" text-anchor="middle" font-size="9"  fill="#80cbc4">Motion inconsistency · inter-frame jitter</text>
+
+  <!-- FREQUENCY branch -->
+  <rect x="546" y="138" width="250" height="140" rx="12" fill="#4a148c" stroke="#311b92" stroke-width="2" filter="url(#shB2)"/>
+  <text x="671" y="162" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">📡 Frequency Features</text>
+  <text x="671" y="180" text-anchor="middle" font-size="10" fill="#ce93d8">Compression &amp; GAN artefacts</text>
+  <text x="671" y="198" text-anchor="middle" font-size="10" fill="#f3e5f5">On-the-fly DCT (128d)</text>
+  <text x="671" y="214" text-anchor="middle" font-size="10" fill="#f3e5f5">FFT radial spectrum (32d)</text>
+  <text x="671" y="230" text-anchor="middle" font-size="10" fill="#f3e5f5">8×8 block DCT means+stds</text>
+  <text x="671" y="246" text-anchor="middle" font-size="10" fill="#f3e5f5">Xception 256d parallel branch</text>
+  <text x="671" y="262" text-anchor="middle" font-size="9"  fill="#ce93d8">JPEG blocking · GAN grid artefacts</text>
+
+  <!-- PHYSIOLOGICAL branch -->
+  <rect x="814" y="138" width="236" height="140" rx="12" fill="#e65100" stroke="#bf360c" stroke-width="2" filter="url(#shB2)"/>
+  <text x="932" y="162" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">💓 Physiological</text>
+  <text x="932" y="180" text-anchor="middle" font-size="10" fill="#ffe0b2">Blood-flow signal analysis</text>
+  <text x="932" y="198" text-anchor="middle" font-size="10" fill="#fff3e0">CHROM rPPG (9 ROIs)</text>
+  <text x="932" y="214" text-anchor="middle" font-size="10" fill="#fff3e0">117-dim feature vector</text>
+  <text x="932" y="230" text-anchor="middle" font-size="10" fill="#fff3e0">HRV · SNR · LF/HF Power</text>
+  <text x="932" y="246" text-anchor="middle" font-size="10" fill="#fff3e0">Cross-ROI correlation + phase</text>
+  <text x="932" y="262" text-anchor="middle" font-size="9"  fill="#ffcc80">Deepfakes lack coherent blood flow</text>
+
+  <!-- Arrows converge down -->
+  <line x1="135" y1="278" x2="135" y2="318" stroke="#546e7a" stroke-width="1.3" stroke-dasharray="5,3"/>
+  <line x1="403" y1="278" x2="403" y2="318" stroke="#546e7a" stroke-width="1.3" stroke-dasharray="5,3"/>
+  <line x1="671" y1="278" x2="671" y2="318" stroke="#546e7a" stroke-width="1.3" stroke-dasharray="5,3"/>
+  <line x1="932" y1="278" x2="932" y2="318" stroke="#546e7a" stroke-width="1.3" stroke-dasharray="5,3"/>
+  <line x1="135" y1="318" x2="932" y2="318" stroke="#546e7a" stroke-width="1.3" stroke-dasharray="5,3"/>
+  <line x1="530" y1="318" x2="530" y2="338" stroke="#546e7a" stroke-width="1.8" marker-end="url(#arrB2)"/>
+
+  <!-- Fusion banner -->
+  <rect x="80" y="340" width="900" height="66" rx="14" fill="#1a237e" stroke="#0d1460" stroke-width="2" filter="url(#shB2)"/>
+  <text x="530" y="368" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">👉 Multi-Level Feature Fusion — Makes the System Very Strong</text>
+  <text x="530" y="387" text-anchor="middle" font-size="11" fill="#90caf9">Spatial + Temporal + Frequency + Physiological → Late-Fusion Ensemble → P(Fake)</text>
+  <text x="530" y="403" text-anchor="middle" font-size="9"  fill="#c5cae9">Each domain is orthogonal — no single generative model can simultaneously fool all four signal types</text>
+
+  <!-- Why strong callout -->
+  <line x1="530" y1="406" x2="530" y2="428" stroke="#546e7a" stroke-width="1.8" marker-end="url(#arrB2)"/>
+  <rect x="200" y="430" width="660" height="58" rx="12" fill="#0d47a1" stroke="#1a237e" stroke-width="2"/>
+  <text x="530" y="455" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">Orthogonality = Robustness</text>
+  <text x="530" y="473" text-anchor="middle" font-size="11" fill="#90caf9">A deepfake may fool one stream but physiological + frequency signals expose it anyway</text>
+  <text x="530" y="489" text-anchor="middle" font-size="9"  fill="#c5cae9">Ensemble diversity reduces variance · OOF calibration eliminates bias · Bootstrap CI validates significance</text>
+</svg>
+    </div>
+  </div>
+
+  <!-- 4-domain detail cards -->
+  <div class="card-grid card-grid-2 mt-24">
+    <div class="card" style="border-left:4px solid #1565c0;">
+      <h3 style="color:#1565c0;margin-bottom:12px;font-size:15px;">🖼️ Spatial Features — Image Details</h3>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">Extracted from CNN backbone global-average-pooled representations. Captures blending boundaries, texture inconsistencies, and identity-swap artefacts that deepfake generators leave in pixel space.</p>
+      <ul class="feature-list">
+        <li>EfficientNet-B4: 1792-dim spatial embedding per frame</li>
+        <li>Xception: 2048-dim via depthwise-separable conv tower</li>
+        <li>Swin-Tiny: 768-dim hierarchical patch features</li>
+        <li>ECA channel attention re-weights discriminative channels</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:4px solid #00695c;">
+      <h3 style="color:#00695c;margin-bottom:12px;font-size:15px;">⏱️ Temporal Features — Frame Changes</h3>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">Deepfake generators synthesise each frame largely independently, causing unnatural inter-frame motion, flickering, and micro-expression discontinuities that temporal models detect.</p>
+      <ul class="feature-list">
+        <li>BiLSTM (2L × 256H bidirectional) across frame sequence</li>
+        <li>Multi-Head Attention (4 heads) for global dependency</li>
+        <li>pack_padded_sequence eliminates padding gradient corruption</li>
+        <li>Progressive frame curriculum: 5→10→16 frames per epoch</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:4px solid #4a148c;">
+      <h3 style="color:#4a148c;margin-bottom:12px;font-size:15px;">📡 Frequency Features — Fake Artefacts</h3>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">GAN-generated images exhibit characteristic spectral footprints — periodic grid patterns in DCT space, unnatural high-frequency energy distribution, and JPEG re-compression blocking artefacts.</p>
+      <ul class="feature-list">
+        <li>On-the-fly DCT: 64×64 grayscale → 8×8 block means+stds → 128d</li>
+        <li>FFT radial spectrum: 32-dim ring-averaged frequency bins</li>
+        <li>Xception parallel frequency branch: 256-dim learned projection</li>
+        <li>log(|DCT|+ε) normalisation for scale invariance</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:4px solid #e65100;">
+      <h3 style="color:#e65100;margin-bottom:12px;font-size:15px;">💓 Physiological Features — Blood Flow</h3>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">Real human faces carry subtle periodic colour changes caused by the cardiac pulse. Deepfakes synthesise appearance without simulating blood flow, creating detectable physiological incoherence.</p>
+      <ul class="feature-list">
+        <li>CHROM rPPG from 9 facial ROIs (forehead, cheeks, jaw, nose, chin)</li>
+        <li>HRV features: RMSSD · SDNN · pNN50 · LF/HF power ratio</li>
+        <li>Cross-ROI correlation + phase synchrony across 9 regions</li>
+        <li>Spectral SNR · dominant frequency · harmonic ratio per ROI</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="info-box mt-16">
+    <strong>🔑 Why Multi-Level Analysis Makes This System Very Strong</strong>
+    No current deepfake generator simultaneously fools all four domains. A video that passes spatial inspection
+    will fail physiological (no blood-flow signal); one that mimics blood-flow patterns will still show
+    DCT frequency anomalies. The orthogonality of these four streams is the core architectural strength of NeuroPulse.
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════ BACKEND PAGE 3: Training Strategy + Technologies -->
+<section class="section" id="backend-training">
+  <div class="section-label">Backend · Page 3 of 3</div>
+  <div class="section-title">Training Strategy &amp; Backend Technologies</div>
+  <div class="section-sub">
+    The training regime is built around identity-aware data splitting to prevent model memorisation,
+    Stochastic Weight Averaging for stable generalisation, and a carefully chosen technology stack
+    optimised for GPU-accelerated deep learning on video data.
+  </div>
+
+  <div class="fc-section">
+    <div class="fc-header">
+      <div class="fc-num" style="background:linear-gradient(135deg,#4a148c,#9c27b0);">B3</div>
+      <div>
+        <h2>Identity-Aware Training Strategy (StratifiedGroupKFold)</h2>
+        <p>Same person will NOT appear in both train and test — prevents model cheating (memorisation)</p>
+      </div>
+    </div>
+    <div class="fc-wrapper">
+<svg viewBox="0 0 1060 520" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI',system-ui,sans-serif">
+  <defs>
+    <marker id="arrB3" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
+      <path d="M0,0 L0,7 L9,3.5 z" fill="#546e7a"/>
+    </marker>
+    <filter id="shB3"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#4a148c" flood-opacity="0.10"/></filter>
+  </defs>
+
+  <text x="530" y="28" text-anchor="middle" font-size="14" font-weight="800" fill="#1a237e">Training Strategy: StratifiedGroupKFold (Identity-Aware)</text>
+
+  <!-- master dataset source -->
+  <rect x="200" y="42" width="660" height="52" rx="12" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2" filter="url(#shB3)"/>
+  <text x="530" y="65" text-anchor="middle" font-size="12" font-weight="700" fill="#4a148c">master_dataset_index.csv — Identity-Tagged Rows</text>
+  <text x="530" y="82" text-anchor="middle" font-size="10" fill="#6a1b9a">video_id · label · identity (FF_person_N / Celeb_person_N / Custom_person_N / DFDC_basename)</text>
+  <line x1="530" y1="94" x2="530" y2="116" stroke="#546e7a" stroke-width="1.8" marker-end="url(#arrB3)"/>
+
+  <!-- StratifiedGroupKFold box -->
+  <rect x="80" y="118" width="900" height="72" rx="12" fill="#7b1fa2" stroke="#4a148c" stroke-width="2" filter="url(#shB3)"/>
+  <text x="530" y="144" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">StratifiedGroupKFold (k=5)</text>
+  <text x="530" y="162" text-anchor="middle" font-size="11" fill="#e1bee7">Groups = person identities · Stratified = balanced real/fake ratio per fold</text>
+  <text x="530" y="178" text-anchor="middle" font-size="10" fill="#f3e5f5">sklearn.model_selection.StratifiedGroupKFold — identity-aware split algorithm</text>
+  <line x1="530" y1="190" x2="530" y2="212" stroke="#546e7a" stroke-width="1.8" marker-end="url(#arrB3)"/>
+
+  <!-- 5 fold boxes -->
+  <text x="530" y="228" text-anchor="middle" font-size="11" font-weight="700" fill="#4a148c">5 Cross-Validation Folds — Each Person Appears in Only ONE Split Side</text>
+
+  <!-- Fold 1 -->
+  <rect x="10"  y="238" width="190" height="90" rx="10" fill="#e1bee7" stroke="#7b1fa2" stroke-width="1.5"/>
+  <text x="105" y="258" text-anchor="middle" font-size="10" font-weight="800" fill="#4a148c">Fold 1</text>
+  <rect x="20"  y="264" width="170" height="16" rx="4" fill="#7b1fa2"/>
+  <text x="105" y="275" text-anchor="middle" font-size="9" fill="#fff">Train: persons 2–5</text>
+  <rect x="20"  y="284" width="170" height="16" rx="4" fill="#e65100"/>
+  <text x="105" y="295" text-anchor="middle" font-size="9" fill="#fff">Val: person 1 only</text>
+  <text x="105" y="320" text-anchor="middle" font-size="8" fill="#6a1b9a">No overlap guaranteed</text>
+
+  <!-- Fold 2 -->
+  <rect x="214" y="238" width="190" height="90" rx="10" fill="#e1bee7" stroke="#7b1fa2" stroke-width="1.5"/>
+  <text x="309" y="258" text-anchor="middle" font-size="10" font-weight="800" fill="#4a148c">Fold 2</text>
+  <rect x="224" y="264" width="170" height="16" rx="4" fill="#7b1fa2"/>
+  <text x="309" y="275" text-anchor="middle" font-size="9" fill="#fff">Train: persons 1,3–5</text>
+  <rect x="224" y="284" width="170" height="16" rx="4" fill="#e65100"/>
+  <text x="309" y="295" text-anchor="middle" font-size="9" fill="#fff">Val: person 2 only</text>
+  <text x="309" y="320" text-anchor="middle" font-size="8" fill="#6a1b9a">No overlap guaranteed</text>
+
+  <!-- Fold 3 -->
+  <rect x="418" y="238" width="190" height="90" rx="10" fill="#e1bee7" stroke="#7b1fa2" stroke-width="1.5"/>
+  <text x="513" y="258" text-anchor="middle" font-size="10" font-weight="800" fill="#4a148c">Fold 3</text>
+  <rect x="428" y="264" width="170" height="16" rx="4" fill="#7b1fa2"/>
+  <text x="513" y="275" text-anchor="middle" font-size="9" fill="#fff">Train: 1,2,4,5</text>
+  <rect x="428" y="284" width="170" height="16" rx="4" fill="#e65100"/>
+  <text x="513" y="295" text-anchor="middle" font-size="9" fill="#fff">Val: person 3 only</text>
+  <text x="513" y="320" text-anchor="middle" font-size="8" fill="#6a1b9a">No overlap guaranteed</text>
+
+  <!-- Fold 4 -->
+  <rect x="622" y="238" width="190" height="90" rx="10" fill="#e1bee7" stroke="#7b1fa2" stroke-width="1.5"/>
+  <text x="717" y="258" text-anchor="middle" font-size="10" font-weight="800" fill="#4a148c">Fold 4</text>
+  <rect x="632" y="264" width="170" height="16" rx="4" fill="#7b1fa2"/>
+  <text x="717" y="275" text-anchor="middle" font-size="9" fill="#fff">Train: 1–3, 5</text>
+  <rect x="632" y="284" width="170" height="16" rx="4" fill="#e65100"/>
+  <text x="717" y="295" text-anchor="middle" font-size="9" fill="#fff">Val: person 4 only</text>
+  <text x="717" y="320" text-anchor="middle" font-size="8" fill="#6a1b9a">No overlap guaranteed</text>
+
+  <!-- Fold 5 -->
+  <rect x="826" y="238" width="224" height="90" rx="10" fill="#e1bee7" stroke="#7b1fa2" stroke-width="1.5"/>
+  <text x="938" y="258" text-anchor="middle" font-size="10" font-weight="800" fill="#4a148c">Fold 5</text>
+  <rect x="836" y="264" width="204" height="16" rx="4" fill="#7b1fa2"/>
+  <text x="938" y="275" text-anchor="middle" font-size="9" fill="#fff">Train: persons 1–4</text>
+  <rect x="836" y="284" width="204" height="16" rx="4" fill="#e65100"/>
+  <text x="938" y="295" text-anchor="middle" font-size="9" fill="#fff">Val: person 5 only</text>
+  <text x="938" y="320" text-anchor="middle" font-size="8" fill="#6a1b9a">No overlap guaranteed</text>
+
+  <!-- Convergence arrows -->
+  <line x1="105" y1="328" x2="105" y2="358" stroke="#80cbc4" stroke-width="1.3" stroke-dasharray="5,3"/>
+  <line x1="309" y1="328" x2="309" y2="358" stroke="#80cbc4" stroke-width="1.3" stroke-dasharray="5,3"/>
+  <line x1="513" y1="328" x2="513" y2="358" stroke="#80cbc4" stroke-width="1.3" stroke-dasharray="5,3"/>
+  <line x1="717" y1="328" x2="717" y2="358" stroke="#80cbc4" stroke-width="1.3" stroke-dasharray="5,3"/>
+  <line x1="938" y1="328" x2="938" y2="358" stroke="#80cbc4" stroke-width="1.3" stroke-dasharray="5,3"/>
+  <line x1="105" y1="358" x2="938" y2="358" stroke="#80cbc4" stroke-width="1.3" stroke-dasharray="5,3"/>
+  <line x1="530" y1="358" x2="530" y2="376" stroke="#546e7a" stroke-width="1.8" marker-end="url(#arrB3)"/>
+
+  <!-- Result box -->
+  <rect x="80" y="378" width="900" height="90" rx="14" fill="#1a237e" stroke="#0d1460" stroke-width="2" filter="url(#shB3)"/>
+  <text x="530" y="404" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">👉 Identity-Based Splitting — Critical Anti-Leakage Design</text>
+  <text x="530" y="424" text-anchor="middle" font-size="11" fill="#90caf9">Same person will NOT appear in both train and validation sets</text>
+  <text x="530" y="442" text-anchor="middle" font-size="10" fill="#bbdefb">Prevents face-memorisation — the primary source of inflated metrics in deepfake literature</text>
+  <text x="530" y="458" text-anchor="middle" font-size="10" fill="#c5cae9">Required by IEEE T-IFS, CVPR, and top security venues · GroupShuffleSplit 80/20 for rPPG ML pipeline</text>
+  <text x="530" y="474" text-anchor="middle" font-size="9"  fill="#90caf9">SWA (Stochastic Weight Averaging) further stabilises generalisation beyond single best-checkpoint selection</text>
+</svg>
+    </div>
+  </div>
+
+  <!-- Technologies Used -->
+  <div class="section-label mt-24" style="margin-top:36px;">Backend Technologies</div>
+  <div class="section-title" style="font-size:22px;">Technologies Used in Backend</div>
+
+  <div class="card-grid card-grid-3" style="margin-top:20px;">
+    <div class="card" style="border-top:4px solid #e65100;">
+      <div style="font-size:32px;margin-bottom:10px;">🔥</div>
+      <h3 style="color:#e65100;margin-bottom:8px;">PyTorch 2.4</h3>
+      <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Deep Learning Framework</div>
+      <ul class="feature-list">
+        <li>EfficientNet-B4, Xception, Swin-Tiny via <code>timm</code></li>
+        <li>BiLSTM + Multi-Head Attention layers</li>
+        <li>Focal Loss, AdamW, SWA optimisers</li>
+        <li>FP32 mode, cuDNN disabled for P100 compat.</li>
+        <li>pack_padded / pad_packed sequence utilities</li>
+        <li>Gradient accumulation (×4) for small batches</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:4px solid #1565c0;">
+      <div style="font-size:32px;margin-bottom:10px;">📐</div>
+      <h3 style="color:#1565c0;margin-bottom:8px;">Scikit-learn</h3>
+      <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">ML Models &amp; Splitting</div>
+      <ul class="feature-list">
+        <li>StratifiedGroupKFold identity-aware splits</li>
+        <li>XGBoost · LightGBM · HistGradientBoosting</li>
+        <li>LogisticRegression meta-learner (stacking)</li>
+        <li>RobustScaler feature normalisation</li>
+        <li>ExtraTrees feature importance selector</li>
+        <li>GroupShuffleSplit for rPPG 80/20 split</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:4px solid #00695c;">
+      <div style="font-size:32px;margin-bottom:10px;">🎥</div>
+      <h3 style="color:#00695c;margin-bottom:8px;">OpenCV</h3>
+      <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Video Processing</div>
+      <ul class="feature-list">
+        <li>cv2.VideoCapture for all video formats</li>
+        <li>np.linspace frame-index sampling</li>
+        <li>warpAffine eye-landmark alignment</li>
+        <li>Laplacian variance blur detection</li>
+        <li>ConvexHull ROI masking for rPPG</li>
+        <li>BGR→RGB conversion and resize ops</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:4px solid #4a148c;">
+      <div style="font-size:32px;margin-bottom:10px;">🫀</div>
+      <h3 style="color:#4a148c;margin-bottom:8px;">MediaPipe</h3>
+      <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Face Landmarks</div>
+      <ul class="feature-list">
+        <li>FaceMesh: 468 facial landmarks per frame</li>
+        <li>9 precisely-defined facial ROI regions</li>
+        <li>static_image_mode=False for video streams</li>
+        <li>Confidence threshold 0.5 for detection</li>
+        <li>CHROM rPPG signal extraction per ROI</li>
+        <li>Physiological feature engineering pipeline</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:4px solid #1b5e20;">
+      <div style="font-size:32px;margin-bottom:10px;">🔢</div>
+      <h3 style="color:#1b5e20;margin-bottom:8px;">NumPy &amp; Pandas</h3>
+      <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Data Handling</div>
+      <ul class="feature-list">
+        <li>NumPy: .npy disk cache for face frames</li>
+        <li>np.linspace frame sampling indices</li>
+        <li>Pandas: master_dataset_index.csv I/O</li>
+        <li>DataFrame merge (inner join) for ensemble</li>
+        <li>Bootstrap resampling (n=1000) for CI</li>
+        <li>RobustScaler + ExtraTrees pipeline</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:4px solid #b71c1c;">
+      <div style="font-size:32px;margin-bottom:10px;">🧩</div>
+      <h3 style="color:#b71c1c;margin-bottom:8px;">facenet-pytorch / albumentations</h3>
+      <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Detection &amp; Augmentation</div>
+      <ul class="feature-list">
+        <li>MTCNN: multi-task cascaded face detection</li>
+        <li>Confidence ≥ 0.9 face quality gate</li>
+        <li>Albumentations: HFlip · JPEG · GaussNoise</li>
+        <li>CoarseDropout · Posterize · ElasticTransform</li>
+        <li>MixUp (β distribution) + CutMix (α=1.0)</li>
+        <li>Hard-negative mining with curriculum epochs</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="info-box mt-16">
+    <strong>🏆 Important — Why StratifiedGroupKFold Matters</strong>
+    Standard k-fold cross-validation would allow the same <em>person's</em> real and fake videos to appear in
+    both the training and validation sets, causing the model to simply memorise faces rather than learn
+    deepfake detection. StratifiedGroupKFold on person identities is the only correct approach — and the one
+    required by IEEE T-IFS, CVPR, and all top-tier security publication venues.
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════ FRONTEND PAGE -->
+<section class="section" id="frontend">
+  <div class="section-label">Frontend · Page 1 of 1</div>
+  <div class="section-title">Frontend Technologies &amp; Justification</div>
+  <div class="section-sub">
+    The NeuroPulse frontend is intentionally built with zero external framework dependencies — leveraging
+    only browser-native APIs to achieve a lightweight, high-performance, and visually immersive interface
+    perfectly suited for an AI deepfake detection dashboard.
+  </div>
+
+  <!-- 4-technology grid -->
+  <div class="card-grid card-grid-2" style="margin-top:8px;">
+
+    <!-- Tech 1: Vanilla JS -->
+    <div class="model-card eff" style="padding:32px;">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+        <div style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#1565c0,#42a5f5);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;">JS</div>
+        <div>
+          <div class="model-type">Core Logic</div>
+          <h3 style="font-size:18px;">Vanilla JavaScript (ES6+)</h3>
+        </div>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6;">
+        Handles all the dynamic logic on the client side, including file uploading, calling the backend HTTP API
+        (<code>fetch</code> API), parsing the JSON responses, and rendering dynamic elements like the canvas
+        animations and charts.
+      </p>
+      <div class="info-box" style="margin:0;">
+        <strong>Why we chose it:</strong>
+        By omitting a heavy frontend framework like React or Angular, we kept the application incredibly lightweight,
+        fast, and dependency-free. This reduces the footprint of the architecture and simplifies the serving of the
+        frontend. For a straightforward file-upload and results-dashboard interface, vanilla JS minimises overhead
+        and allows for direct DOM manipulation with high performance.
+      </div>
+      <div class="model-stat-grid mt-16">
+        <div class="model-stat"><div class="label">Framework deps</div><div class="value">0</div></div>
+        <div class="model-stat"><div class="label">Build step</div><div class="value">None</div></div>
+        <div class="model-stat"><div class="label">API client</div><div class="value">Fetch API</div></div>
+        <div class="model-stat"><div class="label">DOM</div><div class="value">Direct</div></div>
+      </div>
+    </div>
+
+    <!-- Tech 2: HTML5 Canvas -->
+    <div class="model-card xcep" style="padding:32px;">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+        <div style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#4a148c,#9c27b0);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🎨</div>
+        <div>
+          <div class="model-type">Visualisation</div>
+          <h3 style="font-size:18px;">HTML5 Canvas API</h3>
+        </div>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6;">
+        Powers the background "Neural Canvas" and dynamic biometric visualisation rendering — including network
+        nodes pulsing and the animated neural-network overlays that give the dashboard its futuristic AI identity.
+      </p>
+      <div class="info-box" style="margin:0;">
+        <strong>Why we chose it:</strong>
+        The Canvas API offers high-performance rendering capabilities inside the browser. Drawing dozens or hundreds
+        of animated nodes tracking mathematical calculations allows us to give the dashboard a highly immersive and
+        futuristic "AI/Neural" visual identity without using heavy external graphics libraries. Native Canvas leverages
+        hardware acceleration out-of-the-box.
+      </div>
+      <div class="model-stat-grid mt-16">
+        <div class="model-stat"><div class="label">GPU accel.</div><div class="value">✓ Native</div></div>
+        <div class="model-stat"><div class="label">External lib</div><div class="value">None</div></div>
+        <div class="model-stat"><div class="label">Node anim.</div><div class="value">Real-time</div></div>
+        <div class="model-stat"><div class="label">Context</div><div class="value">2D ctx</div></div>
+      </div>
+    </div>
+
+    <!-- Tech 3: CSS3 -->
+    <div class="model-card rppg" style="padding:32px;">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+        <div style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#00695c,#26a69a);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🎨</div>
+        <div>
+          <div class="model-type">Styling &amp; Layout</div>
+          <h3 style="font-size:18px;">Modern CSS3</h3>
+        </div>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6;">
+        Drives the entire "NeuroPulse" dark bioluminescent styling. Uses custom properties
+        (<code>:root { --var: color; }</code>) for theme management, <code>rgba</code> glassmorphism
+        (<code>--glass</code> variables) effects for the containers, and CSS Grid/Flexbox for the layout.
+      </p>
+      <div class="info-box" style="margin:0;">
+        <strong>Why we chose it:</strong>
+        Native CSS3 has evolved to the point where preprocessors like SASS are mostly optional for small-to-medium
+        applications. CSS Variables allow for instantaneous theme propagation across all components, and the
+        glassmorphism approach accurately communicates a clean, analytical, data-centric interface perfectly
+        suited for an AI tool.
+      </div>
+      <div class="model-stat-grid mt-16">
+        <div class="model-stat"><div class="label">Preprocessor</div><div class="value">None</div></div>
+        <div class="model-stat"><div class="label">CSS vars</div><div class="value">:root</div></div>
+        <div class="model-stat"><div class="label">Layout</div><div class="value">Grid/Flex</div></div>
+        <div class="model-stat"><div class="label">Theme</div><div class="value">CSS vars</div></div>
+      </div>
+    </div>
+
+    <!-- Tech 4: Fetch API -->
+    <div class="model-card swin" style="padding:32px;">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+        <div style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#e65100,#ff9800);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🌐</div>
+        <div>
+          <div class="model-type">HTTP Client</div>
+          <h3 style="font-size:18px;">Native Fetch API</h3>
+        </div>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6;">
+        Seamlessly connects the frontend client to the Python/FastAPI microservices backend. It streams the
+        uploaded video payload securely over network requests to the inference endpoints, handling multipart
+        form data uploads and JSON response parsing natively.
+      </p>
+      <div class="info-box" style="margin:0;">
+        <strong>Why we chose it:</strong>
+        Replaces the need for third-party HTTP clients like Axios. The native Fetch API handles modern
+        Promise-based architecture and async/await syntax naturally, keeping the build step at zero while
+        supporting CORS and efficient data transfer natively.
+      </div>
+      <div class="model-stat-grid mt-16">
+        <div class="model-stat"><div class="label">Dep (Axios)</div><div class="value">Removed</div></div>
+        <div class="model-stat"><div class="label">Async</div><div class="value">await/Promise</div></div>
+        <div class="model-stat"><div class="label">CORS</div><div class="value">✓ Native</div></div>
+        <div class="model-stat"><div class="label">Build step</div><div class="value">0</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Design justification table -->
+  <div class="tbl-wrap mt-24" style="margin-top:28px;">
+    <table>
+      <thead><tr>
+        <th>Technology</th>
+        <th>Role</th>
+        <th>Why Chosen Over Alternative</th>
+        <th>Key Benefit</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Vanilla JavaScript (ES6+)</strong></td>
+          <td>All client-side logic</td>
+          <td>React / Angular / Vue eliminated — no virtual DOM overhead needed for simple upload+dashboard flow</td>
+          <td><span class="badge badge-blue">Zero deps · Fast cold-start</span></td>
+        </tr>
+        <tr>
+          <td><strong>HTML5 Canvas API</strong></td>
+          <td>Neural background + animated nodes</td>
+          <td>Three.js / WebGL eliminated — 2D animated nodes don't require 3D overhead</td>
+          <td><span class="badge badge-purple">HW-accelerated · native</span></td>
+        </tr>
+        <tr>
+          <td><strong>Modern CSS3 + Variables</strong></td>
+          <td>Full NeuroPulse dark theme</td>
+          <td>SASS/LESS eliminated — CSS custom properties sufficient for theme propagation</td>
+          <td><span class="badge badge-teal">Instant theme switch</span></td>
+        </tr>
+        <tr>
+          <td><strong>Native Fetch API</strong></td>
+          <td>Backend HTTP communication</td>
+          <td>Axios / superagent eliminated — native Promise/async, CORS, multipart support built-in</td>
+          <td><span class="badge badge-orange">0 KB added · async/await</span></td>
+        </tr>
+        <tr>
+          <td><strong>CSS Grid + Flexbox</strong></td>
+          <td>Responsive layout system</td>
+          <td>Bootstrap / Tailwind eliminated — native CSS layout engines cover all required layouts</td>
+          <td><span class="badge badge-green">Pure native · no classes</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
 <!-- ══════════════════════════════════════════════════════════ COMPARISON -->
 <section class="section">
   <div class="section-label">Comparison</div>
@@ -1687,7 +2328,7 @@
 </div><!-- /container -->
 
 <footer>
-  <strong>SpectroPulse</strong> · Multi-Modal Deepfake Detection System ·
+  <strong>NeuroPulse</strong> · Multi-Modal Deepfake Detection System ·
   rPPG + EfficientNet-B4 + Xception + Swin-Tiny Late-Fusion Ensemble<br>
   <span style="font-size:11px;opacity:0.6;margin-top:6px;display:block;">
     Trained on FaceForensics++ · Celeb-DF v2 · DFDC · Custom Dataset ·
